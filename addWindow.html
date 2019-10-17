@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
+    />
+
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Add Items</h1>
+    <div class="container">
+      <form>
+        <div>
+          <label>Enter Item</label>
+          <input type="text" id="item" />
+        </div>
+        <button type="submit" class="btn waves-effect waves-light">
+          Add Item
+        </button>
+      </form>
+    </div>
+
+    <script>
+      const electron = require("electron");
+
+      const { ipcRenderer } = electron;
+
+      const form = document.querySelector("form");
+
+      form.addEventListener("submit", submitForm);
+
+      function submitForm(e) {
+        e.preventDefault();
+        let item = document.getElementById("item");
+
+        let label = document.querySelector("label");
+
+        setTimeout(() => {
+          label.innerText = "";
+        }, 2000);
+
+        if (!item.value) {
+          label.style.color = "red";
+          label.innerText = "Please add something";
+          return;
+        }
+
+        ipcRenderer.send("item:add", item.value);
+
+        // alert
+
+        label.style.color = "green";
+        label.innerText = "Successfully added item";
+
+        //empty field
+        document.getElementById("item").value = "";
+      }
+    </script>
+  </body>
+</html>

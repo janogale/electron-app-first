@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <title>First Electron App</title>
+  </head>
+  <body>
+    <nav>
+      <div class="nav-wrapper">
+        <a class="brand-logo center">Shopping List</a>
+      </div>
+    </nav>
+    <ul></ul>
+
+    <script>
+      const electron = require("electron");
+      const { ipcRenderer } = electron;
+      const ul = document.querySelector("ul");
+
+      // catch item value and add to ul.
+      ipcRenderer.on("item:add", (e, item) => {
+        ul.className = "collection";
+        const li = document.createElement("li");
+        li.className = "collection-item";
+        li.innerHTML = item;
+        ul.appendChild(li);
+      });
+
+      // clear all items
+      ipcRenderer.on("item:clear", (e, item) => {
+        ul.innerHTML = null;
+        ul.className = "";
+      });
+
+      // remove single item;
+      ul.addEventListener("dblclick", e => {
+        e.target.remove();
+        if (ul.children.length === 0) ul.className = "";
+      });
+    </script>
+  </body>
+</html>
